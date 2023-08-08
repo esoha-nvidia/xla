@@ -78,7 +78,7 @@ class HybridMesh(Mesh):
   """Creates a hybrid device mesh of devices connected with ICI and DCN networks.
     The shape of logical mesh should be ordered by increasing network-intensity
     e.g. [replica, data, model] where mdl has the most network communication
-    requirements. 
+    requirements.
 
   Args:
     ici_mesh_shape: shape of the logical mesh for inner connected devices.
@@ -88,7 +88,7 @@ class HybridMesh(Mesh):
     # This example is assuming 2 slices of v4-8.
     ici_mesh_shape = (1, 4, 1) # (data, fsdp, tensor)
     dcn_mesh_shape = (2, 1, 1)
-    
+
     mesh = HybridMesh(ici_mesh_shape, dcn_mesh_shape, ('data','fsdp','tensor'))
     print(mesh.shape())
     >> OrderedDict([('data', 2), ('fsdp', 4), ('tensor', 1)])
@@ -106,6 +106,8 @@ class HybridMesh(Mesh):
     assert len(ici_mesh_shape) == len(dcn_mesh_shape)
     mesh_shape = tuple([x * y for x, y in zip(ici_mesh_shape, dcn_mesh_shape)])
     self.device_attributes = xr.global_runtime_device_attributes()
+    self.device_attributes.sort(key=lambda attr : parse_xla_device(attr['name'])[1])
+
     if 'slice_index' in self.device_attributes[0] and np.prod(
         dcn_mesh_shape) == 1:
       raise ValueError('Provide dcn_mesh_shape to create a mesh for multislice')
