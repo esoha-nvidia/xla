@@ -21,10 +21,14 @@ started:
 
 ## Getting Started
 
-To install PyTorch/XLA a new VM:
+To install PyTorch/XLA in a new VM:
 
 ```
 pip install torch~=2.0.0 https://storage.googleapis.com/tpu-pytorch/wheels/tpuvm/torch_xla-2.0-cp38-cp38-linux_x86_64.whl
+```
+If that doesn't work, try this instead:
+```
+pip install torch~=2.0.0 https://storage.googleapis.com/tpu-pytorch/wheels/colab/torch_xla-2.0-cp310-cp310-linux_x86_64.whl
 ```
 
 To update your existing training loop, make the following changes:
